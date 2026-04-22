@@ -1,161 +1,151 @@
 # Regulated AI Starter Kit
 
-[![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=for-the-badge&logo=github)](https://github.com/simaba/regulated-ai-starter-kit/generate)
+[![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=for-the-badge&logo=github)](https://github.com/simaba/regulated-ai/generate)
 [![NIST AI RMF](https://img.shields.io/badge/NIST%20AI%20RMF-Aligned-0055A4?style=flat-square)](https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-[![Maintained](https://img.shields.io/badge/Maintained-yes-green.svg?style=flat-square)](https://github.com/simaba/regulated-ai-starter-kit)
+[![Maintained](https://img.shields.io/badge/Maintained-yes-green.svg?style=flat-square)](https://github.com/simaba/regulated-ai)
 
 A **GitHub template repository** giving AI teams a running start on governance,
 compliance, and deployment readiness for regulated industries.
 
-Click **"Use this template"** above to create your own copy pre-wired with:
+Click **Use this template** above to create your own copy pre-wired with:
 
 - NIST AI RMF-aligned governance documentation
-- A YAML-driven release readiness gate system
-- A structured risk taxonomy (mapped to NIST RMF + EU AI Act)
-- CI/CD validation pipelines
+- Release readiness configuration stubs
+- A structured risk taxonomy mapped to NIST AI RMF and EU AI Act concepts
+- CI/CD validation workflows
 - Incident response playbook stubs
 - Model card templates
 
 ---
 
-## Who Is This For?
+## Who this is for
 
 Teams deploying AI in:
-- **Healthcare** — clinical decision support, diagnostic AI, patient risk scoring
-- **Financial Services** — credit scoring, fraud detection, algorithmic trading
-- **Insurance** — underwriting AI, claims automation, risk assessment
-- **Government** — benefits eligibility, document processing, public-facing AI
+- **Healthcare** for clinical decision support, diagnostic AI, or patient risk scoring
+- **Financial Services** for credit scoring, fraud detection, or model-assisted decisions
+- **Insurance** for underwriting AI, claims automation, or risk assessment
+- **Government** for benefits eligibility, document processing, or public-facing AI
 
 ---
 
-## Repository Structure
+## Repository structure
 
-```
-regulated-ai-starter-kit/
+```text
+regulated-ai/
 ├── governance/
-│   ├── ai-governance-policy.md        # Organizational AI governance policy template
-│   ├── roles-and-responsibilities.md  # RACI for AI governance roles
-│   ├── model-inventory.md             # Active model inventory tracker
-│   └── nist-rmf-mapping.md            # Your implementation of NIST AI RMF functions
-│
+│   ├── ai-governance-policy.md
+│   ├── roles-and-responsibilities.md
+│   ├── model-inventory.md
+│   └── nist-rmf-mapping.md
 ├── risk/
-│   ├── risk-register.md               # AI risk register template
-│   ├── risk-taxonomy.yaml             # Structured risk taxonomy (NIST + EU AI Act)
-│   └── risk-assessment-template.md    # Per-system risk assessment template
-│
+│   ├── risk-register.md
+│   ├── risk-taxonomy.yaml
+│   └── risk-assessment-template.md
 ├── release/
-│   ├── release-checklist.yaml         # Release readiness gate configuration
-│   ├── release-readiness-report.md    # Pre-deployment readiness report template
-│   └── deployment-approval.md        # Deployment approval sign-off template
-│
+│   ├── release-checklist.yaml
+│   ├── release-readiness-report.md
+│   └── deployment-approval.md
 ├── incident/
-│   ├── incident-response-playbook.md  # AI incident response procedures
-│   ├── incident-report-template.md    # Post-incident report template
-│   └── escalation-matrix.md          # Escalation paths and contacts
-│
+│   ├── incident-response-playbook.md
+│   ├── incident-report-template.md
+│   └── escalation-matrix.md
 ├── model-cards/
-│   └── model-card-template.md        # Standard model card template
-│
-├── .github/
-│   └── workflows/
-│       ├── validate-release-config.yml # CI: validates release-checklist.yaml
-│       └── governance-checks.yml      # CI: checks governance doc completeness
-│
-└── setup.py                           # Setup wizard (coming soon)
+│   └── model-card-template.md
+└── .github/
+    └── workflows/
+        ├── validate-release-config.yml
+        └── governance-checks.yml
 ```
 
 ---
 
-## Quick Start
+## Quick start
 
-### 1. Create Your Repository From This Template
+### 1. Create your repository from this template
 
-Click "Use this template" → "Create a new repository" and give it a name like
-`acme-ai-governance` or `{team}-ai-deployment-kit`.
+Click **Use this template** and create a new repository such as `acme-ai-governance` or `{team}-ai-deployment-kit`.
 
-### 2. Customize the Governance Policy
+### 2. Customize the governance policy
 
-Edit `governance/ai-governance-policy.md` — replace `[Organization Name]` placeholders
-with your organization's name and adapt the policy sections to match your internal processes.
+Edit `governance/ai-governance-policy.md` and replace `[Organization Name]` placeholders with your organization name, decision rights, and internal approval path.
 
-### 3. Configure Your Release Checklist
+### 3. Configure your release checklist
 
-Edit `release/release-checklist.yaml` to add or remove checks relevant to your
-tech stack and regulatory environment:
+Edit `release/release-checklist.yaml` to reflect your actual controls, owners, and risk tier.
 
 ```yaml
-# release/release-checklist.yaml
 metadata:
   project: "Your Project Name"
   version: "1.0.0"
   environment: "production"
-  regulated_industry: "healthcare"  # or: finance, insurance, government
+  regulated_industry: "healthcare"
+  risk_classification: "high"
 
-pre_deployment_gates:
-  model_validation:
+model_validation:
+  performance:
     accuracy_threshold: 0.95
-    bias_evaluation: required
-    explainability_report: required
-  governance:
+    bias_evaluation_complete: true
+
+governance:
+  documentation:
     risk_assessment_complete: true
-    legal_review_complete: true
-    compliance_sign_off: true
-  infrastructure:
-    security_scan: passed
-    load_testing: passed
-    rollback_plan: documented
+  approvals:
+    technical_review: true
+    legal_review: true
+
+infrastructure:
+  testing:
+    unit_tests_passing: true
+  rollback:
+    rollback_plan_documented: true
 ```
 
-### 4. Run the CI Validation
+### 4. Run the CI validation
 
-Push to any branch to trigger automatic validation of your release configuration:
+Push to any branch to trigger the included GitHub Actions checks.
 
 ```bash
 git add .
-git commit -m "Configure release checklist for production deployment"
+git commit -m "Configure regulated AI starter kit"
 git push
 ```
 
-The GitHub Actions workflow will validate your YAML configuration and report
-any missing required fields.
+### 5. Complete your risk assessment
 
-### 5. Complete Your Risk Assessment
-
-Copy `risk/risk-assessment-template.md` and fill it out for each AI system
-you are deploying. The template walks through NIST AI RMF risk categories.
+Copy `risk/risk-assessment-template.md` and fill it out for each AI system you are deploying. The template is designed to make risk assumptions, evidence gaps, and ownership explicit.
 
 ---
 
-## NIST AI RMF Alignment
+## NIST AI RMF alignment
 
-This starter kit implements the four core NIST AI RMF functions:
+This starter kit is organized around the four core NIST AI RMF functions:
 
-| Function | Implementation in This Kit |
+| Function | Implementation in this kit |
 |---|---|
-| **Govern** | `governance/` directory — policy, roles, model inventory |
-| **Map** | `risk/risk-taxonomy.yaml` — categorized risk landscape |
-| **Measure** | `release/release-checklist.yaml` — measurable deployment gates |
-| **Manage** | `incident/` directory — response procedures and escalation |
+| **Govern** | `governance/` directory for policy, roles, and model inventory |
+| **Map** | `risk/` directory for taxonomy and per-system assessments |
+| **Measure** | `release/` directory for pre-deployment checks and readiness artifacts |
+| **Manage** | `incident/` directory for monitoring, escalation, and response |
 
 ---
 
-## Related Resources
+## Related resources
 
-| Repository | What It Adds |
+| Repository | What it adds |
 |---|---|
-| [enterprise-ai-governance-playbook](https://github.com/simaba/enterprise-ai-governance-playbook) | Full governance playbook with detailed implementation guidance |
-| [ai-release-readiness-checklist](https://github.com/simaba/ai-release-readiness-checklist) | Extended release checklist framework and CLI tool |
-| [ai-risk-taxonomy](https://github.com/simaba/ai-risk-taxonomy) | Detailed AI risk taxonomy with NIST RMF + EU AI Act mappings |
-| [nist-ai-rmf-implementation-guide](https://github.com/simaba/nist-ai-rmf-implementation-guide) | Step-by-step guide for implementing NIST AI RMF |
-| [awesome-ai-governance](https://github.com/simaba/awesome-ai-governance) | Curated list of AI governance resources |
+| [governance-playbook](https://github.com/simaba/governance-playbook) | Full governance playbook with broader operating-model guidance |
+| [release-checklist](https://github.com/simaba/release-checklist) | CLI validator and stricter release gate logic |
+| [release-governance](https://github.com/simaba/release-governance) | Release lifecycle governance framework |
+| [nist-rmf-guide](https://github.com/simaba/nist-rmf-guide) | Practitioner guide for implementing NIST AI RMF |
+| [ai-prism](https://github.com/simaba/ai-prism) | Curated list of governance tools, frameworks, and references |
 
 ---
 
 ## License
 
-MIT License — see [LICENSE](LICENSE). Use freely in your organization.
+MIT License. See [LICENSE](LICENSE).
 
 ---
 
-*Maintained by [Sima Bagheri](https://github.com/simaba) · Built for AI teams in regulated industries*
+*Maintained by [Sima Bagheri](https://github.com/simaba) · Built for AI teams working in regulated environments.*
