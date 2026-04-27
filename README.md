@@ -16,6 +16,9 @@ Click **Use this template** above to create your own copy pre-wired with:
 - CI/CD validation workflows
 - Incident response playbook stubs
 - Model card templates
+- Generic sample artifacts that show how to fill the templates safely
+
+> This repository is a starter kit. It is not legal advice, compliance certification, or a substitute for formal safety, privacy, legal, or regulatory review.
 
 ---
 
@@ -33,6 +36,11 @@ Teams deploying AI in:
 
 ```text
 regulated-ai/
+├── docs/
+│   └── how-to-use-this-template.md
+├── examples/
+│   ├── sample-release-checklist.yaml
+│   └── sample-risk-register.md
 ├── governance/
 │   ├── ai-governance-policy.md
 │   ├── roles-and-responsibilities.md
@@ -66,13 +74,17 @@ regulated-ai/
 
 Click **Use this template** and create a new repository such as `acme-ai-governance` or `{team}-ai-deployment-kit`.
 
-### 2. Customize the governance policy
+### 2. Follow the adoption guide
+
+Start with [`docs/how-to-use-this-template.md`](docs/how-to-use-this-template.md). It explains what to edit in the first hour and first week after creating your copy.
+
+### 3. Customize the governance policy
 
 Edit `governance/ai-governance-policy.md` and replace `[Organization Name]` placeholders with your organization name, decision rights, and internal approval path.
 
-### 3. Configure your release checklist
+### 4. Configure your release checklist
 
-Edit `release/release-checklist.yaml` to reflect your actual controls, owners, and risk tier.
+Edit `release/release-checklist.yaml` to reflect your actual controls, owners, and risk tier. See [`examples/sample-release-checklist.yaml`](examples/sample-release-checklist.yaml) for a generic filled example.
 
 ```yaml
 metadata:
@@ -101,7 +113,7 @@ infrastructure:
     rollback_plan_documented: true
 ```
 
-### 4. Run the CI validation
+### 5. Run the CI validation
 
 Push to any branch to trigger the included GitHub Actions checks.
 
@@ -111,9 +123,9 @@ git commit -m "Configure regulated AI starter kit"
 git push
 ```
 
-### 5. Complete your risk assessment
+### 6. Complete your risk assessment
 
-Copy `risk/risk-assessment-template.md` and fill it out for each AI system you are deploying. The template is designed to make risk assumptions, evidence gaps, and ownership explicit.
+Copy `risk/risk-assessment-template.md` and fill it out for each AI system you are deploying. Use [`examples/sample-risk-register.md`](examples/sample-risk-register.md) as a simple reference for owner, mitigation, and status discipline.
 
 ---
 
@@ -127,6 +139,12 @@ This starter kit is organized around the four core NIST AI RMF functions:
 | **Map** | `risk/` directory for taxonomy and per-system assessments |
 | **Measure** | `release/` directory for pre-deployment checks and readiness artifacts |
 | **Manage** | `incident/` directory for monitoring, escalation, and response |
+
+---
+
+## Public-safe example rule
+
+The examples in this repository are intentionally generic. If you use this template in a public or shared repository, do not include customer data, employee data, confidential vendor details, unreleased product names, proprietary model results, or internal approval chains.
 
 ---
 
