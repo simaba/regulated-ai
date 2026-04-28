@@ -1,0 +1,79 @@
+name: Governance Checks
+
+on:
+  push:
+    paths:
+      - 'governance/**'
+      - 'risk/**'
+      - 'incident/**'
+      - 'model-cards/**'
+      - 'docs/**'
+      - 'examples/**'
+      - '.github/workflows/governance-checks.yml'
+  pull_request:
+    paths:
+      - 'governance/**'
+      - 'risk/**'
+      - 'incident/**'
+      - 'model-cards/**'
+      - 'docs/**'
+      - 'examples/**'
+      - '.github/workflows/governance-checks.yml'
+
+jobs:
+  governance-artifacts:
+    runs-on: ubuntu-latest
+    name: Check required governance artifacts
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required files exist and are not empty
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import sys
+
+          required_files = [
+              'docs/how-to-use-this-template.md',
+              'governance/ai-governance-policy.md',
+              'governance/roles-and-responsibilities.md',
+              'governance/model-inventory.md',
+              'governance/nist-rmf-mapping.md',
+              'risk/risk-register.md',
+              'risk/risk-taxonomy.yaml',
+              'risk/risk-assessment-template.md',
+              'release/release-checklist.yaml',
+              'release/release-readiness-report.md',
+              'release/deployment-approval.md',
+              'incident/incident-response-playbook.md',
+              'incident/incident-report-template.md',
+              'incident/escalation-matrix.md',
+              'model-cards/model-card-template.md',
+              'examples/sample-release-checklist.yaml',
+              'examples/sample-risk-register.md',
+          ]
+
+          missing = []
+          empty = []
+          for file_name in required_files:
+              path = Path(file_name)
+              if not path.exists():
+                  missing.append(file_name)
+              elif path.stat().st_size == 0:
+                  empty.append(file_name)
+
+          if missing:
+              print('Missing required files:')
+              for item in missing:
+                  print(f'  - {item}')
+          if empty:
+              print('Empty required files:')
+              for item in empty:
+                  print(f'  - {item}')
+
+          if missing or empty:
+              sys.exit(1)
+
+          print('All required governance artifacts exist and are non-empty.')
+          PY
