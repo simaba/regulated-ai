@@ -4,9 +4,13 @@ on:
   push:
     paths:
       - 'release/release-checklist.yaml'
+      - 'examples/sample-release-checklist.yaml'
+      - '.github/workflows/validate-release-config.yml'
   pull_request:
     paths:
       - 'release/release-checklist.yaml'
+      - 'examples/sample-release-checklist.yaml'
+      - '.github/workflows/validate-release-config.yml'
 
 jobs:
   validate:
@@ -22,31 +26,59 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install pyyaml
+        run: python -m pip install --upgrade pip pyyaml
 
       - name: Validate release checklist structure
         run: |
-          python3 - <<'EOF'
-          import yaml, sys
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          import yaml
 
-          with open("release/release-checklist.yaml") as f:
-              config = yaml.safe_load(f)
+          REQUIRED_TOP = ["metadata", "model_validation", "governance", "infrastructure"]
+          REQUIRED_META = ["project", "version", "environment", "regulated_industry", "risk_classification"]
+          ALLOWED_RISKS = {"low", "medium", "high"}
 
-          required_top = ["metadata", "model_validation", "governance", "infrastructure"]
-          missing = [k for k in required_top if k not in config]
-          if missing:
-              print(f"ERROR: Missing required sections: {missing}")
+          paths = [
+              Path("release/release-checklist.yaml"),
+              Path("examples/sample-release-checklist.yaml"),
+          ]
+
+          failed = False
+          for path in paths:
+              if not path.exists():
+                  print(f"ERROR: {path} is missing")
+                  failed = True
+                  continue
+
+              config = yaml.safe_load(path.read_text(encoding="utf-8"))
+              if not isinstance(config, dict):
+                  print(f"ERROR: {path} must contain a YAML mapping at the top level")
+                  failed = True
+                  continue
+
+              missing = [section for section in REQUIRED_TOP if section not in config]
+              if missing:
+                  print(f"ERROR: {path} missing required sections: {missing}")
+                  failed = True
+                  continue
+
+              metadata = config.get("metadata", {})
+              missing_meta = [field for field in REQUIRED_META if not metadata.get(field)]
+              if missing_meta:
+                  print(f"ERROR: {path} missing metadata fields: {missing_meta}")
+                  failed = True
+
+              risk = str(metadata.get("risk_classification", "")).lower()
+              if risk and risk not in ALLOWED_RISKS:
+                  print(f"ERROR: {path} has unsupported risk_classification: {risk}")
+                  failed = True
+
+              print(f"OK: {path}")
+              print(f"  Project: {metadata.get('project', 'not set')}")
+              print(f"  Environment: {metadata.get('environment', 'not set')}")
+              print(f"  Risk Classification: {metadata.get('risk_classification', 'not set')}")
+
+          if failed:
               sys.exit(1)
-
-          meta = config.get("metadata", {})
-          required_meta = ["project", "version", "environment", "regulated_industry", "risk_classification"]
-          missing_meta = [k for k in required_meta if not meta.get(k) or meta.get(k) in [None, "YOUR_PROJECT_NAME"]]
-          if missing_meta:
-              print(f"WARNING: Unconfigured metadata fields: {missing_meta}")
-              print("Please customize release-checklist.yaml with your project details.")
-
-          print("✓ Release checklist YAML structure is valid")
-          print(f"  Project: {meta.get('project', 'not set')}")
-          print(f"  Environment: {meta.get('environment', 'not set')}")
-          print(f"  Risk Classification: {meta.get('risk_classification', 'not set')}")
-          EOF
+          PY
