@@ -5,6 +5,7 @@ on:
     paths:
       - 'governance/**'
       - 'risk/**'
+      - 'release/**'
       - 'incident/**'
       - 'model-cards/**'
       - 'docs/**'
@@ -14,6 +15,7 @@ on:
     paths:
       - 'governance/**'
       - 'risk/**'
+      - 'release/**'
       - 'incident/**'
       - 'model-cards/**'
       - 'docs/**'
