@@ -1,34 +1,41 @@
 # Regulated AI Starter Kit
 
 [![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=for-the-badge&logo=github)](https://github.com/simaba/regulated-ai/generate)
-[![NIST AI RMF](https://img.shields.io/badge/NIST%20AI%20RMF-Aligned-0055A4?style=flat-square)](https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf)
+[![NIST AI RMF](https://img.shields.io/badge/NIST%20AI%20RMF-Informed-0055A4?style=flat-square)](https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 [![Maintained](https://img.shields.io/badge/Maintained-yes-green.svg?style=flat-square)](https://github.com/simaba/regulated-ai)
 
-A **GitHub template repository** giving AI teams a running start on governance,
-compliance, and deployment readiness for regulated industries.
+A **GitHub template repository** giving AI teams a running start on governance documentation, release-readiness artifacts, and deployment-readiness structure for regulated or high-accountability environments.
 
 Click **Use this template** above to create your own copy pre-wired with:
 
-- NIST AI RMF-aligned governance documentation
-- Release readiness configuration stubs
-- A structured risk taxonomy mapped to NIST AI RMF and EU AI Act concepts
+- NIST AI RMF-informed governance documentation
+- release readiness configuration stubs
+- a structured risk taxonomy with practitioner mappings to NIST AI RMF and EU AI Act concepts
 - CI/CD validation workflows
-- Incident response playbook stubs
-- Model card templates
-- Generic sample artifacts that show how to fill the templates safely
+- incident response playbook stubs
+- model card templates
+- generic sample artifacts that show how to fill the templates safely
 
-> This repository is a starter kit. It is not legal advice, compliance certification, or a substitute for formal safety, privacy, legal, or regulatory review.
+> This repository is a starter kit. It is not legal advice, compliance certification, regulatory approval, safety certification, or a substitute for formal safety, privacy, legal, security, or regulatory review.
+
+---
+
+## Maturity
+
+This is a **template repo**. It is intended to help teams start with better structure, not to certify that an AI system is safe, compliant, production-ready, or approved for release.
 
 ---
 
 ## Who this is for
 
 Teams deploying AI in:
+
 - **Healthcare** for clinical decision support, diagnostic AI, or patient risk scoring
 - **Financial Services** for credit scoring, fraud detection, or model-assisted decisions
 - **Insurance** for underwriting AI, claims automation, or risk assessment
 - **Government** for benefits eligibility, document processing, or public-facing AI
+- other high-accountability domains where governance, traceability, and release discipline matter
 
 ---
 
@@ -129,7 +136,7 @@ Copy `risk/risk-assessment-template.md` and fill it out for each AI system you a
 
 ---
 
-## NIST AI RMF alignment
+## NIST AI RMF mapping
 
 This starter kit is organized around the four core NIST AI RMF functions:
 
@@ -140,11 +147,21 @@ This starter kit is organized around the four core NIST AI RMF functions:
 | **Measure** | `release/` directory for pre-deployment checks and readiness artifacts |
 | **Manage** | `incident/` directory for monitoring, escalation, and response |
 
+This is a practitioner mapping, not an official NIST assessment or endorsement.
+
 ---
 
 ## Public-safe example rule
 
-The examples in this repository are intentionally generic. If you use this template in a public or shared repository, do not include customer data, employee data, confidential vendor details, unreleased product names, proprietary model results, or internal approval chains.
+The examples in this repository are intentionally generic. If you use this template in a public or shared repository, do not include customer data, employee data, confidential vendor details, unreleased product names, proprietary model results, internal approval chains, sensitive logs, or real incident details.
+
+---
+
+## Scope and disclaimer
+
+This repository is shared in a personal capacity. It is not legal advice, compliance certification, regulatory approval, safety certification, or official guidance from NIST, the EU, ISO, or any employer.
+
+References to NIST AI RMF, EU AI Act, release readiness, risk taxonomy, model cards, incident response, or regulated-industry obligations are practitioner mappings and examples. Always verify against official sources and internal requirements before using this template for compliance, safety, or release decisions.
 
 ---
 
@@ -166,4 +183,4 @@ MIT License. See [LICENSE](LICENSE).
 
 ---
 
-*Maintained by [Sima Bagheri](https://github.com/simaba) · Built for AI teams working in regulated environments.*
+*Maintained by [Sima Bagheri](https://github.com/simaba) · Built for AI teams working in regulated and high-accountability environments.*
