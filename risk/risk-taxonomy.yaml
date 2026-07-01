@@ -1,0 +1,49 @@
+# Practitioner starter taxonomy. Customize with applicable organization, legal,
+# safety, privacy, security, and sector requirements before use.
+
+risk_dimensions:
+  intended_use_and_impact:
+    description: "Potential consequence if the system is wrong, unavailable, or misused."
+    levels: [low, medium, high]
+  autonomy_and_reversibility:
+    description: "Whether the system can act without review and how easily outcomes can be corrected."
+    levels: [supervised, semi_autonomous, autonomous]
+  data_sensitivity:
+    description: "Sensitivity, volume, provenance, and access boundary of data processed."
+    levels: [public, internal, confidential, sensitive]
+  model_and_tool_change:
+    description: "Materiality of changes to models, prompts, retrieval, tools, or permissions."
+    levels: [minor, material, major]
+  security_and_misuse:
+    description: "Exposure to prompt injection, unsafe tool use, abuse, or exfiltration."
+    levels: [low, medium, high]
+
+risk_tiers:
+  low:
+    illustrative_profile: "Internal, reversible, limited-impact support with bounded data and human review."
+    minimum_expectations:
+      - technical owner review
+      - basic test evidence
+      - documented rollback or disable path
+  medium:
+    illustrative_profile: "Customer-facing or operationally important capability with meaningful failure or data impact."
+    minimum_expectations:
+      - documented risk assessment
+      - evaluation evidence for relevant risks
+      - named governance review path
+      - monitoring and rollback plan
+  high:
+    illustrative_profile: "Regulated, safety-adjacent, high-impact, or difficult-to-reverse capability."
+    minimum_expectations:
+      - formal accountable-owner decision record
+      - relevant legal, privacy, security, safety, and domain review
+      - robust evaluation and incident readiness evidence
+      - defined human oversight, monitoring, and rollback controls
+
+classification_record:
+  system_id: ""
+  proposed_tier: ""
+  rationale: ""
+  accountable_owner: ""
+  review_date: ""
+  unresolved_questions: []
