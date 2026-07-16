@@ -1,69 +1,106 @@
-# Release Readiness Gate Configuration
-# Customize this file for your organization's deployment requirements
-# Aligned with NIST AI RMF Measure function
+# Evidence-Based Release Decision Configuration
+#
+# This file is a starter template. Customize the propositions, evidence,
+# decision outcomes, authority, and terminology for the actual system and
+# organization. A valid file is not proof of safety, compliance, or readiness.
 
 metadata:
   project: "YOUR_PROJECT_NAME"
-  version: "1.0.0"
-  environment: "production"        # staging | production | canary
-  regulated_industry: "general"   # healthcare | finance | insurance | government | general
-  risk_classification: "high"     # high | medium | low (see governance policy)
-  deployment_date: null            # Set before deployment: YYYY-MM-DD
-  deployment_owner: null           # Name of person responsible for deployment
+  version: "YOUR_SYSTEM_VERSION"
+  environment: "YOUR_ENVIRONMENT"
+  decision_scope: "[TBD: population, data, tools, permissions, geography, and rollout stage]"
+  decision_owner: "[TBD: person with release / residual-risk authority]"
+  evidence_cutoff: "[TBD: YYYY-MM-DD]"
+  context:
+    intended_use: "[TBD]"
+    prohibited_uses: []
+    affected_populations: []
+    system_components: []
+    explicit_exclusions: []
 
-# ── Model Validation Gates ────────────────────────────────────────────────────
-model_validation:
-  performance:
-    accuracy_threshold: 0.90        # Minimum accuracy on holdout test set
-    f1_threshold: 0.85              # Minimum F1 score (for classification tasks)
-    latency_p99_ms: 500             # Max 99th percentile inference latency (ms)
-    throughput_rps: 100             # Minimum requests per second under load
-  fairness:
-    bias_evaluation_complete: false  # Set to true after bias audit
-    disparate_impact_ratio: 0.80     # Minimum ratio (1.0 = perfect parity)
-    subgroup_performance_review: false
-  robustness:
-    adversarial_testing_complete: false
-    distribution_shift_tested: false
-    edge_case_coverage_percent: 80
+# Allowed outcomes:
+# release | release_with_conditions | hold | do_not_release | defer
+#
+# Semantics:
+# - blockers prevent release and conditional release.
+# - required_actions are accepted follow-up work under a bounded decision.
+# - conditions restrict the approved scope or operation.
+# - evidence_gaps record unavailable or unreliable evidence.
+# - residual_risks require organization-specific acceptance outside this validator.
+decision:
+  outcome: "defer"
+  rationale: "[TBD]"
+  blockers: []
+  required_actions: []
+  conditions: []
+  evidence_gaps:
+    - "[TBD: evidence required before a decision]"
+  residual_risks: []
+  expires_on: "[TBD: YYYY-MM-DD or change trigger]"
 
-# ── Governance Gates ──────────────────────────────────────────────────────────
-governance:
-  documentation:
-    model_card_complete: false
-    risk_assessment_complete: false
-    data_lineage_documented: false
-    explainability_report_complete: false
-  approvals:
-    technical_review: false        # Engineering lead sign-off
-    ai_governance_review: false    # AI governance team sign-off
-    legal_review: false            # Legal / compliance sign-off
-    security_review: false         # InfoSec sign-off
-  regulatory:
-    gdpr_assessment_complete: false  # If applicable
-    hipaa_assessment_complete: false # If applicable (healthcare)
-    sr_11_7_compliance: false        # If applicable (financial services)
+# Each gate is a decision-relevant proposition. Do not copy these examples
+# blindly; replace them with gates appropriate to the actual authority and harm.
+#
+# status: pass | fail | partial | not_tested | not_applicable
+# A hard gate must be pass or not_applicable (with scoped rationale/evidence)
+# before release or release_with_conditions.
+gates:
+  - id: "SCOPE-001"
+    question: "Are intended use, prohibited use, population, data, tools, permissions, and environment bounded for this decision?"
+    hard_gate: true
+    status: "not_tested"
+    evidence: []
+    owner: "[TBD]"
+    limitation: "[TBD]"
 
-# ── Infrastructure Gates ──────────────────────────────────────────────────────
-infrastructure:
-  testing:
-    unit_tests_passing: false
-    integration_tests_passing: false
-    load_test_passed: false
-    security_scan_passed: false
-  monitoring:
-    alerting_configured: false
-    logging_enabled: false
-    drift_detection_enabled: false
-    dashboards_ready: false
-  rollback:
-    rollback_plan_documented: false
-    rollback_tested: false
-    previous_version_preserved: false
+  - id: "AUTH-001"
+    question: "Are identity, authorization, confirmation, and action boundaries enforced for the reviewed scope?"
+    hard_gate: true
+    status: "not_tested"
+    evidence: []
+    owner: "[TBD]"
+    limitation: "[TBD]"
 
-# ── Incident Readiness ────────────────────────────────────────────────────────
-incident_readiness:
-  runbook_complete: false
-  escalation_contacts_defined: false
-  on_call_rotation_configured: false
-  incident_playbook_reviewed: false
+  - id: "EVAL-001"
+    question: "Does current evaluation evidence support the stated rollout decision and disclose coverage and uncertainty?"
+    hard_gate: false
+    status: "not_tested"
+    evidence: []
+    owner: "[TBD]"
+    limitation: "[TBD]"
+
+  - id: "OPS-001"
+    question: "Can the system be monitored, stopped, contained, recovered, and supported under the reviewed conditions?"
+    hard_gate: true
+    status: "not_tested"
+    evidence: []
+    owner: "[TBD]"
+    limitation: "[TBD]"
+
+  - id: "REDRESS-001"
+    question: "Can affected users or operators correct, contest, or escalate material outcomes where required?"
+    hard_gate: false
+    status: "not_tested"
+    evidence: []
+    owner: "[TBD]"
+    limitation: "[TBD]"
+
+findings:
+  - id: "FINDING-001"
+    description: "[TBD]"
+    severity: "[TBD: low / medium / high / critical]"
+    disposition: "[TBD: blocker / required_action / condition / exception / residual_risk / observation]"
+    owner: "[TBD]"
+    due_or_expiry: "[TBD]"
+
+change_triggers:
+  - "model, provider, prompt, routing, retrieval, or policy change"
+  - "data, user population, geography, tool, permission, or authority change"
+  - "evaluator, threshold, test set, infrastructure, or control change"
+  - "material incident, newly discovered failure class, or expired condition"
+
+follow_through:
+  release_or_hold_action_owner: "[TBD]"
+  monitoring_and_incident_owner: "[TBD]"
+  evidence_record_location: "[TBD]"
+  next_review: "[TBD]"
