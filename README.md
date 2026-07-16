@@ -1,168 +1,237 @@
-# Regulated AI Starter Kit
+# Regulated AI Starter Repository
 
-[![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=for-the-badge&logo=github)](https://github.com/simaba/regulated-ai/generate)
-[![NIST AI RMF](https://img.shields.io/badge/NIST%20AI%20RMF-Informed-0055A4?style=flat-square)](https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf)
+[![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=flat-square&logo=github)](https://github.com/simaba/regulated-ai/generate)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-[![Maintained](https://img.shields.io/badge/Maintained-yes-green.svg?style=flat-square)](https://github.com/simaba/regulated-ai)
 
-A GitHub template repository for governance documentation, release-readiness artifacts, and deployment-readiness structure in regulated or high-accountability AI environments.
+A GitHub template for organizing AI governance, evidence, release decisions, risk records, incident preparation, and model documentation in high-accountability environments.
 
-## Maturity
+The repository provides a starting structure, not a control system. Folder names, completed documents, true/false fields, or a passing CI job do not establish safety, compliance, fairness, production readiness, or release approval.
 
-This is a **template repository**. It is intended to help teams start with better structure, not to certify that an AI system is safe, compliant, production-ready, or approved for release.
+## What changed from a typical starter kit
 
-## Purpose
+The release configuration is built around decision propositions and evidence rather than universal thresholds and sector checkboxes.
 
-Use this template to create a starting repository with:
+It deliberately avoids claims such as:
 
-- NIST AI RMF-informed governance documentation
-- release-readiness configuration stubs
-- a structured risk taxonomy with practitioner mappings to NIST AI RMF and EU AI Act concepts
-- CI/CD validation workflows
-- incident-response playbook stubs
-- model-card templates
-- generic sample artifacts that show how to fill the templates safely
+- every classification system should meet the same accuracy or F1 target;
+- a single disparate-impact ratio demonstrates fairness;
+- “bias evaluation complete” proves an acceptable outcome;
+- a legal or security review can be represented meaningfully by one boolean;
+- healthcare, finance, insurance, or government systems share one fixed gate list;
+- passing unit tests and documenting rollback make a system ready to release.
 
-## Intended use cases
+The right evidence depends on the actual use, people, data, authority, consequences, obligations, and operating environment.
 
-This starter kit is most relevant for teams deploying AI in:
+## Start here
 
-- **Healthcare**: clinical decision support, diagnostic AI, or patient risk scoring
-- **Financial services**: credit scoring, fraud detection, or model-assisted decisions
-- **Insurance**: underwriting AI, claims automation, or risk assessment
-- **Government**: benefits eligibility, document processing, or public-facing AI
-- other high-accountability domains where governance, traceability, and release discipline matter
+| Artifact | Use it for |
+|---|---|
+| [`docs/how-to-use-this-template.md`](docs/how-to-use-this-template.md) | adopting the repository without copying generic controls blindly |
+| [`release/release-checklist.yaml`](release/release-checklist.yaml) | defining a scoped release decision, gates, evidence, conditions, and change triggers |
+| [`examples/sample-release-checklist.yaml`](examples/sample-release-checklist.yaml) | fictional evidence-based conditional-pilot example |
+| [`docs/release-config-validation.md`](docs/release-config-validation.md) | validator scope and decision-coherence rules |
+| [`risk/risk-assessment-template.md`](risk/risk-assessment-template.md) | system-specific risk and evidence review |
+| [`governance/model-inventory.md`](governance/model-inventory.md) | adapting inventory fields for deployed systems and ownership |
+| [`incident/incident-response-playbook.md`](incident/incident-response-playbook.md) | defining incident authority and response |
+| [`model-cards/model-card-template.md`](model-cards/model-card-template.md) | recording system and model information where a model card is useful |
 
 ## Repository structure
 
 ```text
 regulated-ai/
-├── docs/
-│   └── how-to-use-this-template.md
-├── examples/
-│   ├── sample-release-checklist.yaml
-│   └── sample-risk-register.md
-├── governance/
-│   ├── ai-governance-policy.md
-│   ├── roles-and-responsibilities.md
-│   ├── model-inventory.md
-│   └── nist-rmf-mapping.md
-├── risk/
-│   ├── risk-register.md
-│   ├── risk-taxonomy.yaml
-│   └── risk-assessment-template.md
-├── release/
-│   ├── release-checklist.yaml
-│   ├── release-readiness-report.md
-│   └── deployment-approval.md
-├── incident/
-│   ├── incident-response-playbook.md
-│   ├── incident-report-template.md
-│   └── escalation-matrix.md
-├── model-cards/
-│   └── model-card-template.md
-└── .github/
-    └── workflows/
-        ├── validate-release-config.yml
-        └── governance-checks.yml
+├── docs/               adoption and validation guidance
+├── examples/           fictional public-safe artifacts
+├── governance/         policy, roles, inventory, and practitioner mappings
+├── risk/               taxonomy, register, and assessment template
+├── release/            evidence-based release decision artifacts
+├── incident/           incident, escalation, and response templates
+├── model-cards/        model-card starter structure
+├── tools/              narrow structural and semantic validators
+├── tests/              validator tests
+└── .github/workflows/  CI checks for the starter artifacts
 ```
 
-## Quick start
+## Adoption sequence
 
-### 1. Create your repository from this template
+### 1. Define scope and authoritative sources
 
-Click **Use this template** and create a new repository such as `acme-ai-governance` or `{team}-ai-deployment-kit`.
+Before filling templates, record:
 
-### 2. Follow the adoption guide
+- systems and lifecycle stages covered;
+- intended and prohibited uses;
+- user and affected populations;
+- data, model, tool, permission, and environment boundaries;
+- actual internal policies and decision authorities;
+- official legal, regulatory, standards, and contractual sources that apply;
+- information that must remain private.
 
-Start with [`docs/how-to-use-this-template.md`](docs/how-to-use-this-template.md). It explains what to edit in the first hour and first week after creating your copy.
+Remove irrelevant directories rather than preserving them for appearance.
 
-### 3. Customize the governance policy
+### 2. Assign decision and control ownership
 
-Edit `governance/ai-governance-policy.md` and replace `[Organization Name]` placeholders with your organization name, decision rights, and internal approval path.
+Distinguish:
 
-### 4. Configure your release checklist
+- product or use-case owner;
+- technical, data, model, tool, and platform owners;
+- control owners;
+- independent reviewers;
+- release and residual-risk decision owner;
+- incident and remediation owner;
+- correction, appeal, or redress owner where relevant.
 
-Edit `release/release-checklist.yaml` to reflect your actual controls, owners, and risk tier. See [`examples/sample-release-checklist.yaml`](examples/sample-release-checklist.yaml) for a generic filled example.
+A named person without authority or resources is not effective accountability.
+
+### 3. Replace the release propositions
+
+Edit [`release/release-checklist.yaml`](release/release-checklist.yaml). Each gate should be a question whose answer changes the scoped decision.
+
+For example:
 
 ```yaml
 metadata:
-  project: "Your Project Name"
-  version: "1.0.0"
-  environment: "production"
-  regulated_industry: "healthcare"
-  risk_classification: "high"
+  project: "Fictional Catalog Assistant"
+  version: "0.3.0-pilot"
+  environment: "bounded-internal-pilot"
+  decision_scope: "60 trained users; public records; read and draft tools only"
+  decision_owner: "Fictional Pilot Sponsor"
+  evidence_cutoff: "2026-09-30"
 
-model_validation:
-  performance:
-    accuracy_threshold: 0.95
-    bias_evaluation_complete: true
+decision:
+  outcome: "release_with_conditions"
+  blockers: []
+  required_actions:
+    - "Complete the confirmatory legacy-record sample before expansion."
+  conditions:
+    - "Keep source-system tools read-only through the pilot."
+  evidence_gaps:
+    - "Rare legacy records remain under-sampled."
+  residual_risks:
+    - "Staff may over-trust fluent draft rationales."
 
-governance:
-  documentation:
-    risk_assessment_complete: true
-  approvals:
-    technical_review: true
-    legal_review: true
-
-infrastructure:
-  testing:
-    unit_tests_passing: true
-  rollback:
-    rollback_plan_documented: true
+gates:
+  - id: "AUTH-001"
+    question: "Are identity, authorization, confirmation, and action boundaries enforced for the reviewed scope?"
+    hard_gate: true
+    status: "pass"
+    evidence:
+      - "evidence/fictional-permission-test.json"
+    owner: "Fictional Platform Owner"
+    limitation: "Internal pilot configuration only."
 ```
 
-### 5. Run the CI validation
+The example is intentionally fictional. Replace the questions and evidence model with organization-specific requirements.
 
-Push to any branch to trigger the included GitHub Actions checks.
+### 4. Validate structure and decision coherence
 
 ```bash
-git add .
-git commit -m "Configure regulated AI starter kit"
-git push
+python -m pip install pyyaml
+python -m unittest discover -s tests -v
+python tools/validate_release_config.py \
+  release/release-checklist.yaml \
+  --mode template
+python tools/validate_release_config.py \
+  examples/sample-release-checklist.yaml \
+  --mode ready
 ```
 
-### 6. Complete your risk assessment
+The validator checks structure and a small set of rules:
 
-Copy `risk/risk-assessment-template.md` and fill it out for each AI system you are deploying. Use [`examples/sample-risk-register.md`](examples/sample-risk-register.md) as a simple reference for owner, mitigation, and status discipline.
+- no release with blockers or unresolved hard gates;
+- no unconditional release with conditions or required actions;
+- conditional release has a condition or required action;
+- pass / not-applicable gates cite evidence;
+- not-applicable gates include scoped rationale;
+- deferred decisions identify evidence gaps;
+- identifiers are unique and required fields are populated.
 
-## NIST AI RMF mapping
+It does not verify the evidence, gate selection, risk acceptance, or legal and operational sufficiency.
 
-This starter kit is organized around the four core NIST AI RMF functions:
+### 5. Connect the artifacts
 
-| Function | Implementation in this kit |
-|---|---|
-| **Govern** | `governance/` directory for policy, roles, and model inventory |
-| **Map** | `risk/` directory for taxonomy and per-system assessments |
-| **Measure** | `release/` directory for pre-deployment checks and readiness artifacts |
-| **Manage** | `incident/` directory for monitoring, escalation, and response |
+The repository becomes useful when records reference each other:
 
-This is a practitioner mapping, not an official NIST assessment or endorsement.
+```text
+inventory and context
+        ↓
+risk and impact assessment
+        ↓
+evaluation and control evidence
+        ↓
+release decision and conditions
+        ↓
+monitoring, incident, correction, and review
+        ↓
+change, renewal, rollback, or retirement
+```
+
+Avoid duplicating evidence into several documents without provenance. Link the authoritative record and state its version and freshness.
+
+### 6. Define change triggers
+
+A decision should be revisited after material changes to:
+
+- model, provider, prompt, routing, retrieval, or policy;
+- data, population, language, geography, or use case;
+- tools, permissions, identities, and external action authority;
+- infrastructure, region, or supplier;
+- evaluator, threshold, rubric, or test set;
+- applicable policy or obligation;
+- incidents and newly discovered failure classes;
+- conditions, exceptions, or owner authority.
+
+## Relationship to NIST AI RMF
+
+The directory structure and templates may support internal work related to Govern, Map, Measure, and Manage. They do not implement those functions by existing.
+
+| Function | Possible repository support | Evidence still required outside the template |
+|---|---|---|
+| Govern | ownership, policy, inventory, decisions | actual authority, operating process, competence, culture |
+| Map | context and risk templates | validated system and affected-population analysis |
+| Measure | evidence and gate records | valid evaluations, control tests, uncertainty, outcomes |
+| Manage | decision, incident, rollback, and follow-through | effective treatment, response capability, accepted residual risk |
+
+Use official NIST sources as authoritative and verify practitioner mappings.
 
 ## Publication safety
 
-The examples in this repository are intentionally generic. If you use this template in a public or shared repository, do not include customer data, employee data, confidential vendor details, unreleased product names, proprietary model results, internal approval chains, sensitive logs, or real incident details.
+A public copy must not contain real:
 
-## Scope and disclaimer
+- customer, patient, employee, applicant, citizen, or user data;
+- confidential vendor, pricing, contract, architecture, roadmap, prompt, or model result;
+- internal decision rights, approval chains, risk assessments, incidents, logs, endpoints, credentials, or tool manifests;
+- sensitive regulatory or legal advice;
+- examples derived from internal work by changing only names.
 
-This repository is shared in a personal capacity. It is not legal advice, compliance certification, regulatory approval, safety certification, or official guidance from NIST, the EU, ISO, or any employer.
+Use invented organizations, `.example` or `.test` contact domains, synthetic data, and scenarios clearly separate from employment history.
 
-References to NIST AI RMF, EU AI Act, release readiness, risk taxonomy, model cards, incident response, or regulated-industry obligations are practitioner mappings and examples. Always verify against official sources and internal requirements before using this template for compliance, safety, or release decisions.
+## Quality standard
+
+A useful customization should add:
+
+- a decision-relevant proposition;
+- traceable evidence and limitations;
+- an accountable owner with authority;
+- explicit condition, exception, or residual-risk semantics;
+- an enforceable monitoring or stop trigger;
+- a tested incident, containment, rollback, correction, or retirement path;
+- an organization-specific source or requirement.
+
+Avoid adding a document or checkbox merely because it is common in governance repositories.
+
+## Maturity and scope
+
+This is a starter template with working structural and decision-coherence validation. It is not a governance platform, formal control library, compliance assessment, legal opinion, safety case, or release authority.
 
 ## Related repositories
 
-| Repository | What it adds |
+| Repository | Distinct role |
 |---|---|
-| [governance-playbook](https://github.com/simaba/governance-playbook) | Full governance playbook with broader operating-model guidance |
-| [release-checklist](https://github.com/simaba/release-checklist) | CLI validator and stricter release gate logic |
-| [release-governance](https://github.com/simaba/release-governance) | Release lifecycle governance framework |
-| [nist-rmf-guide](https://github.com/simaba/nist-rmf-guide) | Practitioner guide for implementing NIST AI RMF |
-| [ai-prism](https://github.com/simaba/ai-prism) | Curated list of governance tools, frameworks, and references |
-
-## License
-
-MIT License. See [LICENSE](LICENSE).
+| [`governance-playbook`](https://github.com/simaba/governance-playbook) | enterprise governance operating model |
+| [`release-governance`](https://github.com/simaba/release-governance) | release evidence and decision semantics |
+| [`release-checklist`](https://github.com/simaba/release-checklist) | packaged configuration validator |
+| [`nist-rmf-guide`](https://github.com/simaba/nist-rmf-guide) | practitioner navigation and evidence planning |
+| [`agent-eval`](https://github.com/simaba/agent-eval) | evaluation validity and reporting |
 
 ---
 
-*Maintained by [Sima Bagheri](https://github.com/simaba) · Built for AI teams working in regulated and high-accountability environments.*
+*Maintained by [Sima Bagheri](https://github.com/simaba).*
