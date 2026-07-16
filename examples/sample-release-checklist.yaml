@@ -1,46 +1,130 @@
+# Fictional example only. Northstar Library, the system, people, dates, and
+# evidence references below are invented for this repository.
+
 metadata:
-  project: "Document Triage Assistant"
-  version: "0.1.0"
-  environment: "staging"
-  regulated_industry: "general"
-  risk_classification: "medium"
-  deployment_owner: "Example Product Owner"
+  project: "Northstar Catalog Drafting Assistant"
+  version: "0.3.0-pilot"
+  environment: "bounded-internal-pilot"
+  decision_scope: "60 trained library staff; public catalog records only; read and draft tools; no publication, deletion, patron data, or external messaging"
+  decision_owner: "Fictional Pilot Sponsor"
+  evidence_cutoff: "2026-09-30"
+  context:
+    intended_use: "Draft suggested catalog corrections for staff review"
+    prohibited_uses:
+      - "publish or delete records"
+      - "access patron identity or borrowing history"
+      - "make employment, eligibility, legal, or financial decisions"
+    affected_populations:
+      - "library catalog staff"
+      - "users relying on accessible catalog search"
+    system_components:
+      - "fictional language model"
+      - "public catalog retrieval index"
+      - "read-only search tool"
+      - "draft-correction tool"
+    explicit_exclusions:
+      - "public self-service access"
+      - "restricted archive records"
+      - "automated execution of corrections"
 
-model_validation:
-  performance:
-    accuracy_threshold: 0.90
-    bias_evaluation_complete: true
-    adversarial_testing_complete: false
-  fairness:
-    disparate_impact_ratio: 0.86
-    subgroup_performance_review: true
+decision:
+  outcome: "release_with_conditions"
+  rationale: "The fictional evidence supports a small read-and-draft pilot. The pilot remains bounded because correction quality for rare legacy records is not yet estimated precisely enough for broader use."
+  blockers: []
+  required_actions:
+    - "Complete a stratified review of 200 legacy-record drafts before any population expansion."
+  conditions:
+    - "Keep all source-system tools read-only and require staff confirmation before any correction is entered manually."
+    - "Limit the pilot to 60 trained internal users and public catalog records through 2026-11-30."
+    - "Pause the pilot after any confirmed restricted-record exposure or unauthorized write attempt."
+  evidence_gaps:
+    - "Performance on rare handwritten-archive transcription patterns remains based on a small exploratory sample."
+  residual_risks:
+    - "Staff may over-trust fluent but unsupported draft rationales despite source links and training."
+  expires_on: "2026-11-30"
 
-governance:
-  documentation:
-    model_card_complete: true
-    risk_assessment_complete: true
-    explainability_report_complete: false
-  approvals:
-    technical_review: true
-    ai_governance_review: true
-    legal_review: false
-    security_review: true
-  regulatory:
-    privacy_review_complete: true
+gates:
+  - id: "SCOPE-001"
+    question: "Are intended use, prohibited use, population, data, tools, permissions, and environment bounded for this decision?"
+    hard_gate: true
+    status: "pass"
+    evidence:
+      - "evidence/fictional-pilot-scope-v3.md"
+      - "evidence/fictional-data-flow-v2.md"
+    owner: "Fictional Product Owner"
+    limitation: "The scope record applies only to the internal pilot configuration."
 
-infrastructure:
-  testing:
-    unit_tests_passing: true
-    integration_tests_passing: true
-    security_scan_passed: true
-    load_test_passed: false
-  monitoring:
-    alerting_configured: true
-    drift_detection_enabled: true
-  rollback:
-    rollback_plan_documented: true
-    rollback_tested: false
+  - id: "AUTH-001"
+    question: "Are identity, authorization, confirmation, and action boundaries enforced for the reviewed scope?"
+    hard_gate: true
+    status: "pass"
+    evidence:
+      - "evidence/fictional-permission-test-2026-09-22.json"
+      - "evidence/fictional-unauthorized-call-test.md"
+    owner: "Fictional Platform Owner"
+    limitation: "Manual source-system correction occurs outside the assistant and was reviewed as a separate staff workflow."
 
-incident_readiness:
-  runbook_complete: true
-  escalation_contacts_defined: true
+  - id: "DATA-001"
+    question: "Does the reviewed configuration prevent retrieval and disclosure of restricted and patron-linked records?"
+    hard_gate: true
+    status: "pass"
+    evidence:
+      - "evidence/fictional-data-boundary-tests-v4.json"
+    owner: "Fictional Data Protection Reviewer"
+    limitation: "Tests cover the versioned synthetic and public-safe fixture; production records remain outside scope."
+
+  - id: "EVAL-001"
+    question: "Does current evaluation evidence support the stated rollout decision and disclose coverage and uncertainty?"
+    hard_gate: false
+    status: "partial"
+    evidence:
+      - "evidence/fictional-evaluation-report-v5.md"
+    owner: "Fictional Evaluation Owner"
+    limitation: "Core catalog journeys are covered; the rare legacy-record slice requires a larger confirmatory sample before expansion."
+
+  - id: "OPS-001"
+    question: "Can the system be monitored, stopped, contained, recovered, and supported under the reviewed conditions?"
+    hard_gate: true
+    status: "pass"
+    evidence:
+      - "evidence/fictional-pilot-stop-exercise.md"
+      - "evidence/fictional-support-runbook-v2.md"
+    owner: "Fictional Operations Owner"
+    limitation: "The exercise covered the internal pilot only and did not test public-user communication."
+
+  - id: "ACCESS-001"
+    question: "Can pilot staff complete critical review and correction tasks using the supported accessibility paths?"
+    hard_gate: false
+    status: "pass"
+    evidence:
+      - "evidence/fictional-accessibility-review.md"
+    owner: "Fictional Accessibility Reviewer"
+    limitation: "One supported browser and two assistive-technology combinations were reviewed."
+
+findings:
+  - id: "FINDING-001"
+    description: "Rare legacy-record corrections have wide uncertainty because only 32 representative cases were reviewed."
+    severity: "medium"
+    disposition: "required_action"
+    owner: "Fictional Evaluation Owner"
+    due_or_expiry: "before population expansion"
+
+  - id: "FINDING-002"
+    description: "Fluent unsupported rationale remains possible when retrieved source records are incomplete."
+    severity: "medium"
+    disposition: "condition"
+    owner: "Fictional Product Owner"
+    due_or_expiry: "2026-11-30"
+
+change_triggers:
+  - "model, prompt, retrieval corpus, or drafting-policy change"
+  - "addition of write, publish, delete, messaging, or restricted-data authority"
+  - "pilot population, language, site, or geography expansion"
+  - "confirmed restricted-record exposure, unauthorized tool attempt, or material correction incident"
+  - "change to evaluator rubric, scenario suite, or acceptance decision"
+
+follow_through:
+  release_or_hold_action_owner: "Fictional Pilot Owner"
+  monitoring_and_incident_owner: "Fictional Operations Owner"
+  evidence_record_location: "evidence/fictional-release-decision-2026-09-30/"
+  next_review: "2026-11-15 or earlier on any stop trigger"
