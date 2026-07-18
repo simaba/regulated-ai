@@ -33,7 +33,10 @@ python tools/validate_release_config.py \
 
 Ready mode additionally checks:
 
-- required metadata and gate fields do not contain placeholders;
+- no placeholder string remains anywhere in the supplied record, including nested decision lists, evidence references, findings, and follow-through fields;
+- `metadata.version` is a stable token rather than free-form prose;
+- `metadata.evidence_cutoff` is a valid ISO date in `YYYY-MM-DD` form;
+- the decision includes a non-empty rationale;
 - at least one gate exists;
 - passing and not-applicable gates cite evidence;
 - not-applicable gates contain a scoped rationale;
@@ -43,6 +46,8 @@ Ready mode additionally checks:
 - conditional release has at least one condition or required action;
 - deferred decisions identify evidence gaps;
 - do-not-release decisions identify a blocker or unresolved hard gate.
+
+The version rule allows letters, digits, `.`, `_`, `+`, and `-`; it does not require semantic versioning. The purpose is to make the reviewed configuration identifiable and stable enough to compare with its evidence.
 
 ## Semantics
 
@@ -71,7 +76,7 @@ The validator checks internal coherence. It does not determine whether:
 python -m unittest discover -s tests -v
 ```
 
-The tests cover blocker, condition, hard-gate, evidence, placeholder, deferred-decision, and duplicate-ID semantics.
+The tests cover blocker, condition, hard-gate, evidence, nested-placeholder, date, version, deferred-decision, and duplicate-ID semantics.
 
 ## Customization
 
