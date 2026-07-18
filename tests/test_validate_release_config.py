@@ -9,7 +9,7 @@ from tools.validate_release_config import validate
 BASE = {
     "metadata": {
         "project": "Fictional Assistant",
-        "version": "0.1.0",
+        "version": "0.1.0-pilot",
         "environment": "internal-pilot",
         "decision_scope": "20 internal users; read-only tools",
         "decision_owner": "Fictional Sponsor",
@@ -17,6 +17,7 @@ BASE = {
     },
     "decision": {
         "outcome": "release_with_conditions",
+        "rationale": "The fictional evidence supports only a bounded internal pilot.",
         "blockers": [],
         "required_actions": ["Complete the confirmatory sample before expansion."],
         "conditions": ["Keep tools read-only."],
@@ -80,7 +81,7 @@ class ValidateReleaseDecisionTests(unittest.TestCase):
     def test_not_applicable_requires_rationale(self) -> None:
         payload = copy.deepcopy(BASE)
         payload["gates"][0]["status"] = "not_applicable"
-        payload["gates"][0]["limitation"] = ""
+        payload["gates"][0]["limitation"] = None
         errors = validate(payload, "ready")
         self.assertIn(
             "gates[0] with status not_applicable must explain the scoped rationale in limitation",
@@ -112,11 +113,50 @@ class ValidateReleaseDecisionTests(unittest.TestCase):
         errors = validate(payload, "ready")
         self.assertIn("duplicate gate id: AUTH-001", errors)
 
-    def test_ready_mode_rejects_placeholders(self) -> None:
+    def test_ready_mode_rejects_metadata_placeholder(self) -> None:
         payload = copy.deepcopy(BASE)
         payload["metadata"]["decision_owner"] = "[TBD]"
         errors = validate(payload, "ready")
         self.assertIn("metadata.decision_owner contains a placeholder", errors)
+
+    def test_ready_mode_rejects_nested_decision_placeholder(self) -> None:
+        payload = copy.deepcopy(BASE)
+        payload["decision"]["conditions"][0] = "[TBD: condition]"
+        errors = validate(payload, "ready")
+        self.assertIn("decision.conditions[0] contains a placeholder", errors)
+
+    def test_ready_mode_rejects_placeholder_evidence_reference(self) -> None:
+        payload = copy.deepcopy(BASE)
+        payload["gates"][0]["evidence"][0] = "REPLACE_WITH_EVIDENCE"
+        errors = validate(payload, "ready")
+        self.assertIn("gates[0].evidence[0] contains a placeholder", errors)
+
+    def test_ready_mode_requires_rationale(self) -> None:
+        payload = copy.deepcopy(BASE)
+        payload["decision"]["rationale"] = ""
+        errors = validate(payload, "ready")
+        self.assertIn("decision.rationale must be non-empty text in ready mode", errors)
+
+    def test_malformed_evidence_cutoff_is_rejected(self) -> None:
+        payload = copy.deepcopy(BASE)
+        payload["metadata"]["evidence_cutoff"] = "30 September 2026"
+        errors = validate(payload, "ready")
+        self.assertIn(
+            "metadata.evidence_cutoff must be a valid ISO date in YYYY-MM-DD form",
+            errors,
+        )
+
+    def test_unstable_version_identifier_is_rejected(self) -> None:
+        payload = copy.deepcopy(BASE)
+        payload["metadata"]["version"] = "pilot version 1"
+        errors = validate(payload, "ready")
+        self.assertTrue(any("metadata.version must be a stable identifier" in error for error in errors))
+
+    def test_template_mode_allows_placeholders(self) -> None:
+        payload = copy.deepcopy(BASE)
+        payload["metadata"]["decision_owner"] = "[TBD]"
+        payload["decision"]["conditions"][0] = "[TBD: condition]"
+        self.assertNotIn("metadata.decision_owner contains a placeholder", validate(payload, "template"))
 
 
 if __name__ == "__main__":
