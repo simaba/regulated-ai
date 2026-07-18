@@ -177,16 +177,6 @@ def validate(payload: dict[str, Any], mode: str) -> list[str]:
         if field in metadata and not _is_nonempty_text(metadata[field]):
             errors.append(f"metadata.{field} must be non-empty text")
 
-    version = metadata.get("version")
-    if _is_nonempty_text(version) and not VERSION_IDENTIFIER.fullmatch(version):
-        errors.append(
-            "metadata.version must be a stable identifier using letters, digits, '.', '_', '+', or '-'"
-        )
-
-    evidence_cutoff = metadata.get("evidence_cutoff")
-    if _is_nonempty_text(evidence_cutoff) and not _is_iso_date(evidence_cutoff):
-        errors.append("metadata.evidence_cutoff must be a valid ISO date in YYYY-MM-DD form")
-
     outcome = decision.get("outcome")
     if outcome not in ALLOWED_OUTCOMES:
         errors.append(
@@ -223,6 +213,16 @@ def validate(payload: dict[str, Any], mode: str) -> list[str]:
 
     for path in _placeholder_paths(payload):
         errors.append(f"{path} contains a placeholder")
+
+    version = metadata.get("version")
+    if _is_nonempty_text(version) and not VERSION_IDENTIFIER.fullmatch(version):
+        errors.append(
+            "metadata.version must be a stable identifier using letters, digits, '.', '_', '+', or '-'"
+        )
+
+    evidence_cutoff = metadata.get("evidence_cutoff")
+    if _is_nonempty_text(evidence_cutoff) and not _is_iso_date(evidence_cutoff):
+        errors.append("metadata.evidence_cutoff must be a valid ISO date in YYYY-MM-DD form")
 
     rationale = decision.get("rationale")
     if not _is_nonempty_text(rationale):
