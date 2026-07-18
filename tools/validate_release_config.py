@@ -9,6 +9,7 @@ risk is acceptable, or a deployment is safe or compliant.
 from __future__ import annotations
 
 import argparse
+from datetime import date
 import re
 import sys
 from pathlib import Path
@@ -41,6 +42,7 @@ ALLOWED_GATE_STATUS = {
     "not_applicable",
 }
 PLACEHOLDER = re.compile(r"(?:\[?TBD\]?|YOUR_|REPLACE_|<[^>]+>)", re.IGNORECASE)
+VERSION_IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._+-]{0,79}$")
 
 
 def _load(path: str | Path) -> dict[str, Any]:
@@ -61,7 +63,33 @@ def _is_nonempty_text(value: Any) -> bool:
 
 
 def _is_placeholder(value: Any) -> bool:
-    return not _is_nonempty_text(value) or bool(PLACEHOLDER.search(str(value)))
+    return _is_nonempty_text(value) and bool(PLACEHOLDER.search(value))
+
+
+def _is_iso_date(value: Any) -> bool:
+    if not _is_nonempty_text(value):
+        return False
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
+
+
+def _placeholder_paths(value: Any, path: str = "") -> list[str]:
+    """Return paths to placeholder strings anywhere in a ready-mode payload."""
+    paths: list[str] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            child_path = f"{path}.{key}" if path else str(key)
+            paths.extend(_placeholder_paths(child, child_path))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            child_path = f"{path}[{index}]"
+            paths.extend(_placeholder_paths(child, child_path))
+    elif _is_placeholder(value):
+        paths.append(path or "<root>")
+    return paths
 
 
 def _require_list(mapping: dict[str, Any], key: str, errors: list[str]) -> list[Any]:
@@ -107,14 +135,10 @@ def _validate_gate(gate: Any, index: int, mode: str, errors: list[str]) -> None:
         errors.append(f"{prefix}.evidence entries must be non-empty text")
     if owner is not None and not _is_nonempty_text(owner):
         errors.append(f"{prefix}.owner must be non-empty text")
+    if limitation is not None and not _is_nonempty_text(limitation):
+        errors.append(f"{prefix}.limitation must be non-empty text when provided")
 
     if mode == "ready":
-        if _is_placeholder(gate_id):
-            errors.append(f"{prefix}.id contains a placeholder")
-        if _is_placeholder(question):
-            errors.append(f"{prefix}.question contains a placeholder")
-        if _is_placeholder(owner):
-            errors.append(f"{prefix}.owner contains a placeholder")
         if status in {"pass", "not_applicable"} and not evidence:
             errors.append(f"{prefix} with status {status} must cite evidence")
         if status == "not_applicable" and not _is_nonempty_text(limitation):
@@ -152,8 +176,16 @@ def validate(payload: dict[str, Any], mode: str) -> list[str]:
     for field in REQUIRED_METADATA:
         if field in metadata and not _is_nonempty_text(metadata[field]):
             errors.append(f"metadata.{field} must be non-empty text")
-        if mode == "ready" and field in metadata and _is_placeholder(metadata[field]):
-            errors.append(f"metadata.{field} contains a placeholder")
+
+    version = metadata.get("version")
+    if _is_nonempty_text(version) and not VERSION_IDENTIFIER.fullmatch(version):
+        errors.append(
+            "metadata.version must be a stable identifier using letters, digits, '.', '_', '+', or '-'"
+        )
+
+    evidence_cutoff = metadata.get("evidence_cutoff")
+    if _is_nonempty_text(evidence_cutoff) and not _is_iso_date(evidence_cutoff):
+        errors.append("metadata.evidence_cutoff must be a valid ISO date in YYYY-MM-DD form")
 
     outcome = decision.get("outcome")
     if outcome not in ALLOWED_OUTCOMES:
@@ -188,6 +220,13 @@ def validate(payload: dict[str, Any], mode: str) -> list[str]:
 
     if mode == "template":
         return errors
+
+    for path in _placeholder_paths(payload):
+        errors.append(f"{path} contains a placeholder")
+
+    rationale = decision.get("rationale")
+    if not _is_nonempty_text(rationale):
+        errors.append("decision.rationale must be non-empty text in ready mode")
 
     if not gates:
         errors.append("ready mode requires at least one gate")
